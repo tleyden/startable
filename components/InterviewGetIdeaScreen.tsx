@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { StyleSheet, TextInput, Pressable, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
 export default function InterviewGetIdeaScreen() {
   const { colors } = useTheme();
   const router = useRouter();
+  const { openaiKey } = useLocalSearchParams();
   const [idea, setIdea] = useState('');
 
   return (
@@ -44,7 +45,7 @@ export default function InterviewGetIdeaScreen() {
         accessibilityRole="button"
         onPress={() => router.push({
           pathname: '/interview-who-founder',
-          params: { idea }
+          params: { openaiKey, idea }
         })}
         style={({ pressed }) => [
           styles.button,

@@ -8,7 +8,7 @@ import { ThemedView } from '@/components/themed-view';
 export default function InterviewCurrentStatus() {
   const { colors } = useTheme();
   const router = useRouter();
-  const { idea, founderInfo } = useLocalSearchParams();
+  const { openaiKey, idea, founderInfo } = useLocalSearchParams();
   const [currentStatus, setCurrentStatus] = useState('');
 
   return (
@@ -41,7 +41,11 @@ export default function InterviewCurrentStatus() {
 
       <Pressable
         accessibilityRole="button"
-        onPress={() => router.push('/modal')}
+        onPress={() => {
+          // Now you have access to: openaiKey, idea, founderInfo, currentStatus
+          // Can pass to next screen or process the data
+          router.push('/modal');
+        }}
         style={({ pressed }) => [
           styles.button,
           { 

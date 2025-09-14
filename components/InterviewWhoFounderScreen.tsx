@@ -8,7 +8,7 @@ import { ThemedView } from '@/components/themed-view';
 export default function InterviewWhoFounderScreen() {
   const { colors } = useTheme();
   const router = useRouter();
-  const { idea } = useLocalSearchParams();
+  const { openaiKey, idea } = useLocalSearchParams();
   const [founderInfo, setFounderInfo] = useState('');
 
   return (
@@ -44,7 +44,7 @@ export default function InterviewWhoFounderScreen() {
         accessibilityRole="button"
         onPress={() => router.push({
           pathname: '/interview-current-status',
-          params: { idea, founderInfo }
+          params: { openaiKey, idea, founderInfo }
         })}
         style={({ pressed }) => [
           styles.button,

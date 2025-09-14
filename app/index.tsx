@@ -1,12 +1,25 @@
-import { StyleSheet, Pressable } from 'react-native';
+import { StyleSheet, Pressable, TextInput, Alert } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
 export default function HomeScreen() {
   const { colors } = useTheme();
   const router = useRouter();
+  const [openaiKey, setOpenaiKey] = useState('');
+
+  const handleNext = () => {
+    if (!openaiKey.trim()) {
+      Alert.alert('API Key Required', 'Please enter your OpenAI API key to continue.');
+      return;
+    }
+    router.push({
+      pathname: '/interview-get-idea',
+      params: { openaiKey }
+    });
+  };
 
   return (
     <ThemedView style={styles.container}>
@@ -35,9 +48,28 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
 
+      <ThemedView style={styles.formContainer}>
+        <ThemedText style={styles.keyLabel}>OpenAI API Key:</ThemedText>
+        <TextInput
+          value={openaiKey}
+          onChangeText={setOpenaiKey}
+          placeholder="sk-..."
+          placeholderTextColor={colors.border}
+          secureTextEntry
+          style={[
+            styles.keyInput,
+            {
+              borderColor: colors.border,
+              color: colors.text,
+              backgroundColor: colors.card,
+            },
+          ]}
+        />
+      </ThemedView>
+
       <Pressable
         accessibilityRole="button"
-        onPress={() => router.push('/interview-get-idea')}
+        onPress={handleNext}
         style={({ pressed }) => [
           styles.button,
           { 
@@ -101,6 +133,20 @@ const styles = StyleSheet.create({
     lineHeight: 26,
     fontWeight: '700',
     marginTop: 6,
+  },
+  formContainer: {
+    gap: 12,
+    marginBottom: 20,
+  },
+  keyLabel: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  keyInput: {
+    borderWidth: 2,
+    borderRadius: 12,
+    padding: 16,
+    fontSize: 16,
   },
   button: {
     paddingVertical: 18,
