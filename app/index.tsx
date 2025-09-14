@@ -20,12 +20,21 @@ export default function HomeScreen() {
         <ThemedText style={styles.step}>3. Tell us where you're at</ThemedText>
       </ThemedView>
 
-      <ThemedText style={styles.description}>
-        We will generate a{'\n'}
-        3 month roadmap{'\n'}
-        to guide you in{'\n'}
-        building your startup
-      </ThemedText>
+      <ThemedView style={styles.descriptionContainer}>
+        <ThemedText style={styles.descriptionEmoji}>🚀</ThemedText>
+        <ThemedText style={styles.descriptionMain}>
+          We will generate a
+        </ThemedText>
+        <ThemedText style={styles.descriptionHighlight}>
+          ✨ 3 MONTH ROADMAP ✨
+        </ThemedText>
+        <ThemedText style={styles.descriptionMain}>
+          to guide you in
+        </ThemedText>
+        <ThemedText style={styles.descriptionBold}>
+          🏗️ building your startup 💡
+        </ThemedText>
+      </ThemedView>
 
       <Pressable
         accessibilityRole="button"
@@ -46,28 +55,53 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 40,
+    padding: 30,
     justifyContent: 'space-between',
   },
   title: {
     textAlign: 'center',
-    marginTop: 60,
-    fontSize: 28,
+    marginTop: 40,
+    fontSize: 26,
     fontWeight: '600',
   },
   stepsContainer: {
     gap: 12,
-    marginTop: -100,
+    marginTop: -80,
   },
   step: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '500',
   },
-  description: {
-    fontSize: 18,
+  descriptionContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+    paddingHorizontal: 15,
+  },
+  descriptionEmoji: {
+    fontSize: 40,
+    marginBottom: 12,
+  },
+  descriptionMain: {
+    fontSize: 20,
     textAlign: 'center',
-    lineHeight: 24,
-    marginBottom: 40,
+    lineHeight: 26,
+    marginBottom: 6,
+    fontWeight: '400',
+  },
+  descriptionHighlight: {
+    fontSize: 24,
+    textAlign: 'center',
+    lineHeight: 30,
+    marginVertical: 10,
+    fontWeight: '800',
+    letterSpacing: 1,
+  },
+  descriptionBold: {
+    fontSize: 20,
+    textAlign: 'center',
+    lineHeight: 26,
+    fontWeight: '700',
+    marginTop: 6,
   },
   button: {
     paddingVertical: 18,
