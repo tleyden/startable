@@ -5,30 +5,29 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
-export default function InterviewWhoFounderScreen() {
+export default function InterviewCurrentStatus() {
   const { colors } = useTheme();
   const router = useRouter();
-  const { idea } = useLocalSearchParams();
-  const [founderInfo, setFounderInfo] = useState('');
+  const { idea, founderInfo } = useLocalSearchParams();
+  const [currentStatus, setCurrentStatus] = useState('');
 
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="title" style={styles.title}>
-        Tell us about you{'\n'}as a founder
+        Where are you in{'\n'}your journey?
       </ThemedText>
 
       <View style={styles.instructionsBlock}>
         <ThemedText style={styles.instructions}>It would be helpful to mention things like:</ThemedText>
-        <ThemedText style={styles.bullet}>1. What unique skills and experiences do you bring?</ThemedText>
-        <ThemedText style={styles.bullet}>2. What is your long-term vision that will drive you through challenges?</ThemedText>
-        <ThemedText style={styles.bullet}>3. How does your background give you a competitive advantage?</ThemedText>
+        <ThemedText style={styles.bullet}>1. Where are you in your startup journey right now?</ThemedText>
+        <ThemedText style={styles.bullet}>2. What are some challenges you have hit so far?</ThemedText>
       </View>
 
       <TextInput
         multiline
-        value={founderInfo}
-        onChangeText={setFounderInfo}
-        placeholder="Tell us about yourself..."
+        value={currentStatus}
+        onChangeText={setCurrentStatus}
+        placeholder="Tell us where you are in your journey..."
         placeholderTextColor={colors.border}
         style={[
           styles.input,
@@ -42,10 +41,7 @@ export default function InterviewWhoFounderScreen() {
 
       <Pressable
         accessibilityRole="button"
-        onPress={() => router.push({
-          pathname: '/interview-current-status',
-          params: { idea, founderInfo }
-        })}
+        onPress={() => router.push('/modal')}
         style={({ pressed }) => [
           styles.button,
           { 

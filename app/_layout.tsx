@@ -14,6 +14,7 @@ export default function RootLayout() {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="interview-get-idea" options={{ headerShown: false }} />
         <Stack.Screen name="interview-who-founder" options={{ headerShown: false }} />
+        <Stack.Screen name="interview-current-status" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
