@@ -38,6 +38,59 @@ export interface RoadmapOutput {
   criticalPath: string[];
 }
 
+export async function generateTop3FollowUpQuestions(
+  openaiApiKey: string,
+  interviewQuestions: string[],
+  interviewAnswers: string[]
+): Promise<string[]> {
+  const openai = new OpenAI({
+    apiKey: openaiApiKey,
+  });
+
+  const prompt = `You are a startup coach from Y Combinator. You have just received the following questions and answers from a startup founder during their initial consultation.
+
+Interview Questions:
+${interviewQuestions.join('\n')}
+
+Interview Answers:
+${interviewAnswers.join('\n')}
+
+Based on these responses, generate the top 3 most important follow-up questions you would ask to clarify key points and gather additional information needed to generate an optimal startup plan. Focus on areas where the answers reveal gaps, assumptions that need validation, or critical details that are missing.
+
+Return your response as a JSON array of exactly 3 strings, each containing one follow-up question. Example format:
+["What specific metrics will you use to measure product-market fit?", "How much runway do you currently have?", "What is your customer acquisition strategy?"]`;
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4-turbo-preview",
+      messages: [
+        {
+          role: "system",
+          content: "You are a Y Combinator startup coach. Generate exactly 3 follow-up questions in JSON array format based on the provided interview data."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      temperature: 0.7,
+      max_tokens: 500,
+      response_format: { type: "json_object" }
+    });
+
+    const responseContent = completion.choices[0].message.content;
+    if (!responseContent) {
+      throw new Error('No response content from OpenAI');
+    }
+
+    const result = JSON.parse(responseContent);
+    return Array.isArray(result) ? result : result.questions || [];
+  } catch (error) {
+    console.error('Error generating follow-up questions:', error);
+    throw new Error(`Failed to generate follow-up questions: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}
+
 export async function generatePlan(
   openaiApiKey: string,
   interviewQuestions: string[],
