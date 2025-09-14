@@ -8,141 +8,21 @@ import {
   Dimensions,
 } from 'react-native';
 import { PieChart } from 'react-native-gifted-charts';
+import { RoadmapOutput } from '../llm';
 
 const { width } = Dimensions.get('window');
 
-const StartupReadinessSpider = () => {
-  const [selectedArea, setSelectedArea] = useState(null);
+interface StartupReadinessSpiderProps {
+  plan: RoadmapOutput;
+}
 
-  // Your JSON data
-  const data = {
-    progressWeights: [
-      {
-        area: "market_validation",
-        weight: 0.1,
-        description: "Minimal market validation with no customer contact or revenue evidence",
-        rationale: "No customer interviews, surveys, or market research conducted. Only evidence is a prototype from Lovable platform and general statement that 'pet parents are obsessed' without specific validation",
-        relevance: 1.0,
-        keyAchievements: [
-          "Prototype exists from Lovable platform",
-          "General market interest indicated ('pet parents are obsessed')"
-        ],
-        mainGaps: [
-          "No customer discovery or market research conducted",
-          "No revenue validation or paying customers",
-          "No customer feedback or testimonials",
-          "No market testing or validation experiments"
-        ]
-      },
-      {
-        area: "vision_clarity",
-        weight: 0.6,
-        description: "Clear problem and solution definition but lacks specific success metrics",
-        rationale: "Well-defined problem (dogs have difficulty dating) and solution (Tinder for dogs with location-based matching), but no measurable success criteria or specific target customer segmentation",
-        relevance: 1.0,
-        keyAchievements: [
-          "Clear problem statement: dogs have difficulty dating",
-          "Defined solution approach: location-based dog dating platform",
-          "Identified target customers: pet parents and dogs",
-          "Clear value proposition: finds 'hot dogs' in the area"
-        ],
-        mainGaps: [
-          "No specific success metrics defined",
-          "Vague target customer segmentation",
-          "No product scope boundaries clearly defined"
-        ]
-      },
-      {
-        area: "founder_capacity",
-        weight: 0.3,
-        description: "Limited relevant experience with significant skill gaps and resource constraints",
-        rationale: "Founder has personal dog ownership experience and furry community knowledge, but lacks business skills, technical capabilities are unclear, and needs significant funding for marketing",
-        relevance: 1.0,
-        keyAchievements: [
-          "Personal experience as dog owner (direct problem understanding)",
-          "Furry community insider knowledge",
-          "Working prototype from Lovable platform"
-        ],
-        mainGaps: [
-          "No business skills specified",
-          "No technical capabilities detailed",
-          "No time commitment information",
-          "Major skill gaps in marketing and funding acquisition",
-          "No co-founder or team composition details"
-        ]
-      },
-      {
-        area: "business_model",
-        weight: 0.0,
-        description: "No business model defined or validated",
-        rationale: "No revenue model, pricing strategy, unit economics, or monetization approach specified. No evidence of customer willingness to pay",
-        relevance: 1.0,
-        keyAchievements: [],
-        mainGaps: [
-          "No revenue model defined",
-          "No pricing strategy",
-          "No unit economics (CAC, LTV, margins unknown)",
-          "No revenue streams identified",
-          "No monetization validation"
-        ]
-      },
-      {
-        area: "market_opportunity",
-        weight: 0.4,
-        description: "General market interest indicated but no market research or sizing conducted",
-        rationale: "Pet parent obsession suggests market potential, but no market size data, trends analysis, or customer segment research provided",
-        relevance: 1.0,
-        keyAchievements: [
-          "General market interest indicated ('all pet parents are obsessed')",
-          "Growing pet industry trend mentioned"
-        ],
-        mainGaps: [
-          "No market size data (TAM, SAM unknown)",
-          "No market research conducted",
-          "No customer segment analysis",
-          "No market timing analysis"
-        ]
-      },
-      {
-        area: "competitive_position",
-        weight: 0.3,
-        description: "Basic differentiation but limited competitive analysis",
-        rationale: "Specialized focus on dog dating provides some differentiation, but no direct competitor analysis, limited competitive advantages, and no defensible moats identified",
-        relevance: 1.0,
-        keyAchievements: [
-          "Specialized focus on dog dating (vs general pet services)",
-          "Location-based matching system",
-          "Furry community insider knowledge"
-        ],
-        mainGaps: [
-          "No direct competitor analysis",
-          "No competitive advantages detailed",
-          "No barriers to entry identified",
-          "No market positioning strategy"
-        ]
-      }
-    ],
-    nextSteps: [
-      {
-        phase: "Market Validation Sprint",
-        priority: "critical",
-        timeframe: "6-8 weeks",
-        successCriteria: [
-          "20+ customer interviews completed",
-          "Clear willingness to pay validated",
-          "Specific customer pain points identified",
-          "Pricing model validated with target customers"
-        ]
-      }
-    ],
-    overallReadiness: 0.25,
-    estimatedTimeToCompletion: "12-18 months to sustainable revenue and product-market fit"
-  };
+const StartupReadinessSpider = ({ plan }: StartupReadinessSpiderProps) => {
+  const [selectedArea, setSelectedArea] = useState(null);
 
   // Transform data for the spider/radar chart using PieChart with custom rendering
   const chartData = useMemo(() => {
     const colors = ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899'];
-    return data.progressWeights.map((item, index) => ({
+    return plan.progressWeights.map((item, index) => ({
       value: Math.max(item.weight * 100, 5), // Minimum 5 for visibility
       color: colors[index % colors.length],
       label: formatAreaName(item.area),
@@ -186,7 +66,7 @@ const StartupReadinessSpider = () => {
     return (
       <View style={styles.areasContainer}>
         <Text style={styles.sectionTitle}>Area Breakdown</Text>
-        {data.progressWeights.map((area, index) => (
+        {plan.progressWeights.map((area, index) => (
           <TouchableOpacity
             key={area.area}
             style={[
@@ -242,12 +122,12 @@ const StartupReadinessSpider = () => {
   };
 
   const renderNextSteps = () => {
-    if (!data.nextSteps || data.nextSteps.length === 0) return null;
+    if (!plan.nextSteps || plan.nextSteps.length === 0) return null;
 
     return (
       <View style={styles.nextStepsContainer}>
         <Text style={styles.sectionTitle}>Recommended Next Steps</Text>
-        {data.nextSteps.map((step, index) => (
+        {plan.nextSteps.map((step, index) => (
           <View key={index} style={styles.stepCard}>
             <View style={styles.stepHeader}>
               <View style={[
@@ -280,10 +160,10 @@ const StartupReadinessSpider = () => {
         <View style={styles.overallScore}>
           <Text style={styles.scoreLabel}>Overall Readiness:</Text>
           <Text style={styles.overallScoreText}>
-            {(data.overallReadiness * 100).toFixed(0)}%
+            {(plan.overallReadiness * 100).toFixed(0)}%
           </Text>
         </View>
-        <Text style={styles.timeEstimate}>{data.estimatedTimeToCompletion}</Text>
+        <Text style={styles.timeEstimate}>{plan.estimatedTimeToCompletion}</Text>
       </View>
 
       {/* Chart Section */}
@@ -298,7 +178,7 @@ const StartupReadinessSpider = () => {
               <View style={styles.centerLabel}>
                 <Text style={styles.centerLabelText}>Overall</Text>
                 <Text style={styles.centerLabelScore}>
-                  {(data.overallReadiness * 100).toFixed(0)}%
+                  {(plan.overallReadiness * 100).toFixed(0)}%
                 </Text>
               </View>
             )}
