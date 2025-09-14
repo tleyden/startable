@@ -5,6 +5,13 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
+const interviewGetIdeaQuestions = [
+  "What is the core problem you are trying to solve?",
+  "Who is your target customer?", 
+  "How will you solve this problem for this customer?",
+  "How will it make money?"
+];
+
 export default function InterviewGetIdeaScreen() {
   const { colors } = useTheme();
   const router = useRouter();
@@ -19,10 +26,9 @@ export default function InterviewGetIdeaScreen() {
 
       <View style={styles.instructionsBlock}>
         <ThemedText style={styles.instructions}>It would be helpful to mention things like:</ThemedText>
-        <ThemedText style={styles.bullet}>1. What is the core problem you are trying to solve?</ThemedText>
-        <ThemedText style={styles.bullet}>2. Who is your target customer?</ThemedText>
-        <ThemedText style={styles.bullet}>3. How will you solve this problem for this customer?</ThemedText>
-        <ThemedText style={styles.bullet}>4. How will it make money?</ThemedText>
+        {interviewGetIdeaQuestions.map((question, index) => (
+          <ThemedText key={index} style={styles.bullet}>{index + 1}. {question}</ThemedText>
+        ))}
       </View>
 
       <TextInput
@@ -45,7 +51,11 @@ export default function InterviewGetIdeaScreen() {
         accessibilityRole="button"
         onPress={() => router.push({
           pathname: '/interview-who-founder',
-          params: { openaiKey, idea }
+          params: { 
+            openaiKey, 
+            idea, 
+            interviewGetIdeaQuestions: JSON.stringify(interviewGetIdeaQuestions)
+          }
         })}
         style={({ pressed }) => [
           styles.button,

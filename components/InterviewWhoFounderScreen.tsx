@@ -5,10 +5,16 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
+const interviewWhoFounderQuestions = [
+  "What unique skills and experiences do you bring?",
+  "What is your long-term vision that will drive you through challenges?",
+  "How does your background give you a competitive advantage?"
+];
+
 export default function InterviewWhoFounderScreen() {
   const { colors } = useTheme();
   const router = useRouter();
-  const { openaiKey, idea } = useLocalSearchParams();
+  const { openaiKey, idea, interviewGetIdeaQuestions } = useLocalSearchParams();
   const [founderInfo, setFounderInfo] = useState('');
 
   return (
@@ -19,9 +25,9 @@ export default function InterviewWhoFounderScreen() {
 
       <View style={styles.instructionsBlock}>
         <ThemedText style={styles.instructions}>It would be helpful to mention things like:</ThemedText>
-        <ThemedText style={styles.bullet}>1. What unique skills and experiences do you bring?</ThemedText>
-        <ThemedText style={styles.bullet}>2. What is your long-term vision that will drive you through challenges?</ThemedText>
-        <ThemedText style={styles.bullet}>3. How does your background give you a competitive advantage?</ThemedText>
+        {interviewWhoFounderQuestions.map((question, index) => (
+          <ThemedText key={index} style={styles.bullet}>{index + 1}. {question}</ThemedText>
+        ))}
       </View>
 
       <TextInput
@@ -44,7 +50,13 @@ export default function InterviewWhoFounderScreen() {
         accessibilityRole="button"
         onPress={() => router.push({
           pathname: '/interview-current-status',
-          params: { openaiKey, idea, founderInfo }
+          params: { 
+            openaiKey, 
+            idea, 
+            founderInfo,
+            interviewGetIdeaQuestions,
+            interviewWhoFounderQuestions: JSON.stringify(interviewWhoFounderQuestions)
+          }
         })}
         style={({ pressed }) => [
           styles.button,

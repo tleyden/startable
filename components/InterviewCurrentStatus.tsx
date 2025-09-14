@@ -5,10 +5,15 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
+const interviewCurrentStatusQuestions = [
+  "Where are you in your startup journey right now?",
+  "What are some challenges you have hit so far?"
+];
+
 export default function InterviewCurrentStatus() {
   const { colors } = useTheme();
   const router = useRouter();
-  const { openaiKey, idea, founderInfo } = useLocalSearchParams();
+  const { openaiKey, idea, founderInfo, interviewGetIdeaQuestions, interviewWhoFounderQuestions } = useLocalSearchParams();
   const [currentStatus, setCurrentStatus] = useState('');
 
   return (
@@ -19,8 +24,9 @@ export default function InterviewCurrentStatus() {
 
       <View style={styles.instructionsBlock}>
         <ThemedText style={styles.instructions}>It would be helpful to mention things like:</ThemedText>
-        <ThemedText style={styles.bullet}>1. Where are you in your startup journey right now?</ThemedText>
-        <ThemedText style={styles.bullet}>2. What are some challenges you have hit so far?</ThemedText>
+        {interviewCurrentStatusQuestions.map((question, index) => (
+          <ThemedText key={index} style={styles.bullet}>{index + 1}. {question}</ThemedText>
+        ))}
       </View>
 
       <TextInput
@@ -42,8 +48,7 @@ export default function InterviewCurrentStatus() {
       <Pressable
         accessibilityRole="button"
         onPress={() => {
-          // Now you have access to: openaiKey, idea, founderInfo, currentStatus
-          // Can pass to next screen or process the data
+          // Now you have access to: openaiKey, idea, founderInfo, currentStatus, and all question arrays
           router.push('/modal');
         }}
         style={({ pressed }) => [
