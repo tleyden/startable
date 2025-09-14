@@ -1,9 +1,9 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { useLocalSearchParams } from 'expo-router';
-import { StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
-import { useEffect, useState } from 'react';
 import { generatePlan, type RoadmapOutput } from '@/llm';
+import { useLocalSearchParams } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 export default function PlanScreen() {
   const { 
@@ -19,6 +19,7 @@ export default function PlanScreen() {
   const [plan, setPlan] = useState<RoadmapOutput | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [expandedPhase, setExpandedPhase] = useState<number | null>(null);
 
   useEffect(() => {
     const generateRoadmap = async () => {
@@ -91,73 +92,72 @@ export default function PlanScreen() {
     );
   }
 
+  const togglePhase = (index: number) => {
+    setExpandedPhase(expandedPhase === index ? null : index);
+  };
+
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="title" style={styles.title}>
-        Your Startup Roadmap
+        Here is your plan
       </ThemedText>
       
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={true}>
-        <ThemedView style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>Overall Readiness: {Math.round((plan?.overallReadiness || 0) * 100)}%</ThemedText>
-          <ThemedText style={styles.sectionText}>
-            Estimated Time to Completion: {plan?.estimatedTimeToCompletion}
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedView style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>Progress Weights ({plan?.progressWeights.length || 0} areas)</ThemedText>
-          {plan?.progressWeights.map((weight, index) => (
-            <ThemedView key={index} style={styles.progressItem}>
-              <ThemedText style={styles.progressArea}>
-                {weight.area.replace('_', ' ').toUpperCase()}: {Math.round(weight.weight * 100)}%
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        {plan?.nextSteps.map((step, index) => (
+          <Pressable
+            key={index}
+            onPress={() => togglePhase(index)}
+            style={styles.phaseCard}
+          >
+            <View style={styles.phaseHeader}>
+              <View style={styles.phaseContent}>
+                <ThemedText style={styles.phaseTitle}>
+                  Phase {index + 1}
+                </ThemedText>
+                <ThemedText style={styles.phaseSubtitle}>
+                  {step.phase}
+                </ThemedText>
+              </View>
+              <ThemedText style={styles.phaseArrow}>
+                {expandedPhase === index ? '✓' : '>'}
               </ThemedText>
-              <ThemedText style={styles.progressDescription}>{weight.description}</ThemedText>
-              <ThemedText style={styles.progressAchievements}>
-                Key Achievements: {weight.keyAchievements.length} items
-              </ThemedText>
-              <ThemedText style={styles.progressGaps}>
-                Main Gaps: {weight.mainGaps.length} items
-              </ThemedText>
-            </ThemedView>
-          ))}
-        </ThemedView>
-
-        <ThemedView style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>Next Steps ({plan?.nextSteps.length || 0} phases)</ThemedText>
-          {plan?.nextSteps.map((step, index) => (
-            <ThemedView key={index} style={styles.nextStepItem}>
-              <ThemedText style={styles.nextStepPhase}>
-                {step.phase} - {step.priority.toUpperCase()}
-              </ThemedText>
-              <ThemedText style={styles.nextStepTimeframe}>
-                Timeframe: {step.timeframe}
-              </ThemedText>
-              <ThemedText style={styles.nextStepTasks}>
-                Tasks: {step.tasks.length} items
-              </ThemedText>
-              <ThemedText style={styles.nextStepCriteria}>
-                Success Criteria: {step.successCriteria.length} items
-              </ThemedText>
-            </ThemedView>
-          ))}
-        </ThemedView>
-
-        <ThemedView style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>Critical Path ({plan?.criticalPath.length || 0} items)</ThemedText>
-          {plan?.criticalPath.map((item, index) => (
-            <ThemedText key={index} style={styles.criticalPathItem}>
-              {index + 1}. {item}
-            </ThemedText>
-          ))}
-        </ThemedView>
-
-        <ThemedView style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>Raw JSON (for debugging)</ThemedText>
-          <ThemedText style={styles.jsonOutput}>
-            {JSON.stringify(plan, null, 2)}
-          </ThemedText>
-        </ThemedView>
+            </View>
+            
+            {expandedPhase === index && (
+              <View style={styles.phaseDetails}>
+                <View style={styles.detailRow}>
+                  <ThemedText style={styles.detailIcon}>📅</ThemedText>
+                  <ThemedText style={styles.detailText}>
+                    Timeline: {step.timeframe}
+                  </ThemedText>
+                </View>
+                
+                {step.tasks.map((task, taskIndex) => (
+                  <View key={taskIndex} style={styles.detailRow}>
+                    <ThemedText style={styles.detailIcon}>⚙️</ThemedText>
+                    <ThemedText style={styles.detailText}>
+                      Task: {task.description}
+                    </ThemedText>
+                  </View>
+                ))}
+                
+                <View style={styles.detailRow}>
+                  <ThemedText style={styles.detailIcon}>🎯</ThemedText>
+                  <ThemedText style={styles.detailText}>
+                    Outcome: {step.tasks[0]?.outcome || 'Complete phase objectives'}
+                  </ThemedText>
+                </View>
+                
+                <View style={styles.detailRow}>
+                  <ThemedText style={styles.detailIcon}>💪</ThemedText>
+                  <ThemedText style={styles.detailText}>
+                    Skills Required: {step.tasks[0]?.skillsRequired.join(', ') || 'Various'}
+                  </ThemedText>
+                </View>
+              </View>
+            )}
+          </Pressable>
+        ))}
       </ScrollView>
     </ThemedView>
   );
@@ -172,18 +172,62 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 28,
     fontWeight: '600',
-    marginBottom: 20,
+    marginBottom: 30,
     marginTop: 40,
   },
   scrollView: {
     flex: 1,
-    marginTop: 20,
   },
-  jsonOutput: {
-    fontSize: 12,
-    fontFamily: 'monospace',
-    lineHeight: 16,
-    paddingBottom: 40,
+  phaseCard: {
+    backgroundColor: 'rgba(184, 230, 184, 0.1)',
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: '#000',
+    marginBottom: 16,
+    overflow: 'hidden',
+  },
+  phaseHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 20,
+  },
+  phaseContent: {
+    flex: 1,
+  },
+  phaseTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  phaseSubtitle: {
+    fontSize: 16,
+    opacity: 0.8,
+  },
+  phaseArrow: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  phaseDetails: {
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  detailRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginTop: 12,
+  },
+  detailIcon: {
+    fontSize: 16,
+    marginRight: 8,
+    marginTop: 2,
+  },
+  detailText: {
+    flex: 1,
+    fontSize: 14,
+    lineHeight: 20,
   },
   spinner: {
     marginVertical: 30,
@@ -200,80 +244,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'red',
     marginTop: 20,
-  },
-  section: {
-    marginBottom: 24,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(128, 128, 128, 0.2)',
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 12,
-  },
-  sectionText: {
-    fontSize: 16,
-    lineHeight: 22,
-    opacity: 0.8,
-  },
-  progressItem: {
-    marginBottom: 16,
-    padding: 12,
-    backgroundColor: 'rgba(184, 230, 184, 0.1)',
-    borderRadius: 8,
-  },
-  progressArea: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 4,
-  },
-  progressDescription: {
-    fontSize: 14,
-    lineHeight: 18,
-    marginBottom: 6,
-    opacity: 0.9,
-  },
-  progressAchievements: {
-    fontSize: 13,
-    color: 'green',
-    marginBottom: 2,
-  },
-  progressGaps: {
-    fontSize: 13,
-    color: 'orange',
-  },
-  nextStepItem: {
-    marginBottom: 16,
-    padding: 12,
-    backgroundColor: 'rgba(184, 230, 184, 0.15)',
-    borderRadius: 8,
-    borderLeftWidth: 4,
-    borderLeftColor: '#B8E6B8',
-  },
-  nextStepPhase: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 4,
-  },
-  nextStepTimeframe: {
-    fontSize: 14,
-    marginBottom: 4,
-    opacity: 0.8,
-  },
-  nextStepTasks: {
-    fontSize: 13,
-    color: 'blue',
-    marginBottom: 2,
-  },
-  nextStepCriteria: {
-    fontSize: 13,
-    color: 'purple',
-  },
-  criticalPathItem: {
-    fontSize: 14,
-    lineHeight: 20,
-    marginBottom: 6,
-    paddingLeft: 8,
   },
 });
