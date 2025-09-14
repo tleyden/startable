@@ -1,0 +1,3 @@
+1. Where are you in your startup journey right now? (e.g., just an idea, have a basic prototype, have a few users, etc.)
+2. What is the single most important thing you need to figure out next to move forward? (e.g., validating the problem with potential users, building the first version of the product, finding a co-founder, etc.)
+3. What kind of help or resources would make it easier to take that next step? (e.g., mentorship from an expert, a small amount of funding to cover initial costs, connections to potential partners, etc.)

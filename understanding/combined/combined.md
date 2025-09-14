@@ -1,0 +1,11 @@
+What is the core problem you are trying to solve, and for whom?
+What is your proposed solution, and how is it different from or better than existing solutions?
+What is the long-term vision for your idea, and how will it create a sustainable business?
+
+What unique skills and experiences does your founding team bring to the table?
+What is your team's shared passion or long-term vision that will drive you through challenges?
+How does your team's background give you a competitive advantage in the market you're entering?
+
+Where are you in your startup journey right now? (e.g., just an idea, have a basic prototype, have a few users, etc.)
+What is the single most important thing you need to figure out next to move forward? (e.g., validating the problem with potential users, building the first version of the product, finding a co-founder, etc.)
+What kind of help or resources would make it easier to take that next step? (e.g., mentorship from an expert, a small amount of funding to cover initial costs, connections to potential partners, etc.)
