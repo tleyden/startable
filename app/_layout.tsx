@@ -15,6 +15,7 @@ export default function RootLayout() {
         <Stack.Screen name="interview-get-idea" options={{ headerShown: false }} />
         <Stack.Screen name="interview-who-founder" options={{ headerShown: false }} />
         <Stack.Screen name="interview-current-status" options={{ headerShown: false }} />
+        <Stack.Screen name="plan" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

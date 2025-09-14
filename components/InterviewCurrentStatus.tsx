@@ -47,10 +47,18 @@ export default function InterviewCurrentStatus() {
 
       <Pressable
         accessibilityRole="button"
-        onPress={() => {
-          // Now you have access to: openaiKey, idea, founderInfo, currentStatus, and all question arrays
-          router.push('/modal');
-        }}
+        onPress={() => router.push({
+          pathname: '/plan',
+          params: {
+            openaiKey,
+            idea,
+            founderInfo,
+            currentStatus,
+            interviewGetIdeaQuestions,
+            interviewWhoFounderQuestions,
+            interviewCurrentStatusQuestions: JSON.stringify(interviewCurrentStatusQuestions)
+          }
+        })}
         style={({ pressed }) => [
           styles.button,
           { 
