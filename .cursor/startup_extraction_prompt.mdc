@@ -1,0 +1,245 @@
+# Startup Roadmap Information Extraction Prompt
+
+## Task
+Extract and organize information from the provided text inputs into a structured markdown document focused on startup validation areas. Parse the content to assess market validation, vision clarity, founder capacity, business model, market opportunity, and competitive position.
+
+## Input Format
+You will receive four text strings:
+- `idea`: Description of the business idea, problem, and solution
+- `profile`: Information about founder(s) skills, experience, and background  
+- `currentState`: Current progress, achievements, and status of the venture
+- `context`: Market context, resources, constraints, and additional relevant information
+
+## Output Format
+Generate a markdown document with the following exact structure:
+
+```markdown
+# Startup Validation Assessment
+
+## Market Validation
+
+### Customer Discovery
+[Extract evidence of customer contact, interviews, surveys, or market research]
+- [Customer interaction 1]
+- [Customer interaction 2]
+
+### Demand Validation
+[Extract evidence of customer demand, interest, or willingness to pay]
+- [Demand evidence 1]
+- [Demand evidence 2]
+
+### Revenue Evidence
+[Extract any revenue, sales, pre-orders, or monetization proof]
+- [Revenue evidence 1] | [Amount/Metric] | [Date]
+
+### Customer Feedback
+[Extract specific customer feedback, testimonials, or validation results]
+- [Feedback 1]
+- [Feedback 2]
+
+### Market Testing
+[Extract experiments, pilots, MVPs, or validation tests performed]
+- [Test 1] | [Result] | [Learning]
+
+## Vision Clarity
+
+### Problem Definition
+[Extract the core problem being solved and its significance]
+
+### Target Customer
+[Extract specific customer segments, personas, or target market definition]
+- Primary: [Primary customer segment]
+- Secondary: [Secondary segment if mentioned]
+
+### Solution Approach
+[Extract the proposed solution and how it addresses the problem]
+
+### Value Proposition
+[Extract the unique value or benefit provided to customers]
+
+### Success Metrics
+[Extract how success will be measured or defined]
+- [Metric 1]
+- [Metric 2]
+
+### Product Scope
+[Extract feature scope, MVP definition, or product boundaries]
+
+## Founder Capacity
+
+### Founder Background
+[Extract founder information, roles, and responsibilities]
+- [Founder 1]: [Role] | [Background]
+- [Founder 2]: [Role] | [Background]
+
+### Relevant Skills
+[Extract skills directly relevant to the business domain]
+- [Skill 1]: [Proficiency level]
+- [Skill 2]: [Proficiency level]
+
+### Industry Experience
+[Extract relevant industry or domain experience]
+- [Experience 1]: [Domain] | [Years] | [Relevance]
+
+### Technical Capabilities
+[Extract technical skills needed for product development]
+- [Technical skill 1]
+- [Technical skill 2]
+
+### Business Skills
+[Extract sales, marketing, operations, or business development skills]
+- [Business skill 1]
+- [Business skill 2]
+
+### Time Commitment
+[Extract availability, full-time vs part-time commitment]
+
+### Skill Gaps
+[Extract identified weaknesses or missing capabilities]
+- [Gap 1]
+- [Gap 2]
+
+### Team Composition
+[Extract information about co-founders, advisors, or key team members]
+- [Team member]: [Role] | [Skills] | [Commitment]
+
+## Business Model
+
+### Revenue Model
+[Extract how the business will make money]
+
+### Pricing Strategy
+[Extract pricing approach, models, or validated pricing]
+- [Pricing element 1]
+- [Pricing element 2]
+
+### Unit Economics
+[Extract cost structure, margins, or economic validation]
+- Customer Acquisition Cost: [CAC or "Unknown"]
+- Lifetime Value: [LTV or "Unknown"]
+- Gross Margin: [Margin or "Unknown"]
+
+### Revenue Streams
+[Extract different ways the business generates revenue]
+- [Revenue stream 1]
+- [Revenue stream 2]
+
+### Scalability Factors
+[Extract elements that enable business scaling]
+- [Scalability factor 1]
+- [Scalability factor 2]
+
+### Monetization Validation
+[Extract evidence that customers will pay or have paid]
+
+## Market Opportunity
+
+### Market Size
+[Extract total addressable market, market size estimates, or market research]
+- Total Addressable Market: [TAM or "Unknown"]
+- Serviceable Addressable Market: [SAM or "Unknown"]
+
+### Market Trends
+[Extract relevant industry trends, growth patterns, or market dynamics]
+- [Trend 1]
+- [Trend 2]
+
+### Market Timing
+[Extract why now is the right time for this solution]
+
+### Customer Segments
+[Extract different customer types and their characteristics]
+- [Segment 1]: [Size] | [Characteristics]
+- [Segment 2]: [Size] | [Characteristics]
+
+### Market Research
+[Extract market analysis, reports, or research findings]
+- [Research finding 1]
+- [Research finding 2]
+
+### Growth Potential
+[Extract evidence of market growth or expansion opportunities]
+
+## Competitive Position
+
+### Direct Competitors
+[Extract companies solving the same problem for the same customers]
+- [Competitor 1]: [Strengths] | [Weaknesses]
+- [Competitor 2]: [Strengths] | [Weaknesses]
+
+### Indirect Competitors
+[Extract alternative solutions or substitute products]
+- [Alternative 1]: [How it competes]
+- [Alternative 2]: [How it competes]
+
+### Competitive Advantages
+[Extract unique advantages or differentiators]
+- [Advantage 1]
+- [Advantage 2]
+
+### Barriers to Entry
+[Extract defensible moats or competitive protection]
+- [Barrier 1]
+- [Barrier 2]
+
+### Market Positioning
+[Extract how the solution is positioned vs alternatives]
+
+### Differentiation Strategy
+[Extract what makes this solution unique or better]
+```
+
+## Extraction Guidelines
+
+### Information Parsing Priority
+1. **Extract explicit statements first** - Direct quotes and clear facts
+2. **Infer from context** - Draw reasonable conclusions from available information
+3. **Map related concepts** - Connect similar ideas to appropriate categories
+4. **Use "Unknown" or "Not specified"** - For clearly missing information
+
+### Category Mapping Rules
+- **Market Validation**: Any evidence of customer contact, demand, revenue, or market testing
+- **Vision Clarity**: Problem definition, target customers, solution description, goals
+- **Founder Capacity**: Skills, experience, time, team composition, capabilities
+- **Business Model**: Revenue approach, pricing, costs, monetization strategy
+- **Market Opportunity**: Market size, trends, timing, customer segments, growth
+- **Competitive Position**: Competitors, alternatives, advantages, differentiation
+
+### Data Quality Standards
+- **Preserve specificity** - Keep numbers, dates, and specific details
+- **Maintain context** - Include relevant surrounding information
+- **Use consistent formatting** - Follow the exact bullet point structure
+- **Extract quantifiable data** - Numbers, percentages, timeframes, amounts
+- **Identify gaps** - Clearly mark missing or unknown information
+
+### Special Instructions
+- If revenue/sales information is mentioned, always extract amounts and timeframes
+- For customer feedback, include direct quotes when available
+- When extracting market size, look for TAM/SAM mentions or market research
+- For competitive analysis, extract both strengths and weaknesses of competitors
+- Map any validation experiments or tests to Market Validation section
+- Extract both current capabilities and identified skill gaps
+
+## Processing Examples
+
+### Input: "We're building a SaaS platform for small restaurants to manage inventory. I've talked to 20 restaurant owners and 15 said they'd pay $50/month for this."
+### Extract to:
+- **Customer Discovery**: "Conducted interviews with 20 restaurant owners"
+- **Demand Validation**: "15 out of 20 interviewed customers expressed willingness to pay"
+- **Pricing Strategy**: "$50/month subscription model validated with potential customers"
+- **Target Customer**: "Primary: Small restaurant owners"
+
+### Input: "I'm a software engineer with 8 years experience, worked at two food tech startups. Currently working this part-time while at my day job."
+### Extract to:
+- **Relevant Skills**: "Software engineering: Expert level"
+- **Industry Experience**: "Food tech | 8 years | High relevance"
+- **Time Commitment**: "Part-time (has day job)"
+- **Technical Capabilities**: "Software development and engineering"
+
+## Output Requirements
+- Use the exact markdown structure provided
+- Include all sections even if information is limited
+- Use consistent bullet point formatting throughout
+- Preserve numbers, dates, and specific metrics when available
+- Focus on extracting facts and evidence rather than making assumptions
+- Clearly indicate when information is unknown or not provided
