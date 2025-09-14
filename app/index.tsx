@@ -21,9 +21,8 @@ export default function HomeScreen() {
       </ThemedView>
 
       <ThemedView style={styles.descriptionContainer}>
-        <ThemedText style={styles.descriptionEmoji}>🚀</ThemedText>
         <ThemedText style={styles.descriptionMain}>
-          We will generate a
+          🚀 We will generate a
         </ThemedText>
         <ThemedText style={styles.descriptionHighlight}>
           ✨ 3 MONTH ROADMAP ✨
@@ -38,7 +37,7 @@ export default function HomeScreen() {
 
       <Pressable
         accessibilityRole="button"
-        onPress={() => router.push('/modal')}
+        onPress={() => router.push('/interview-get-idea')}
         style={({ pressed }) => [
           styles.button,
           { 
