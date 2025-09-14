@@ -1,34 +1,34 @@
 import { useState } from 'react';
 import { StyleSheet, TextInput, Pressable, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
-export default function InterviewGetIdeaScreen() {
+export default function InterviewWhoFounderScreen() {
   const { colors } = useTheme();
   const router = useRouter();
-  const [idea, setIdea] = useState('');
+  const { idea } = useLocalSearchParams();
+  const [founderInfo, setFounderInfo] = useState('');
 
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="title" style={styles.title}>
-        What's your idea?
+        Tell us about you{'\n'}as a founder
       </ThemedText>
 
       <View style={styles.instructionsBlock}>
         <ThemedText style={styles.instructions}>It would be helpful to mention things like:</ThemedText>
-        <ThemedText style={styles.bullet}>1. What is the core problem you are trying to solve?</ThemedText>
-        <ThemedText style={styles.bullet}>2. Who is your target customer?</ThemedText>
-        <ThemedText style={styles.bullet}>3. How will you solve this problem for this customer?</ThemedText>
-        <ThemedText style={styles.bullet}>4. How will it make money?</ThemedText>
+        <ThemedText style={styles.bullet}>1. What unique skills and experiences do you bring?</ThemedText>
+        <ThemedText style={styles.bullet}>2. What is your long-term vision that will drive you through challenges?</ThemedText>
+        <ThemedText style={styles.bullet}>3. How does your background give you a competitive advantage?</ThemedText>
       </View>
 
       <TextInput
         multiline
-        value={idea}
-        onChangeText={setIdea}
-        placeholder="Describe your idea here..."
+        value={founderInfo}
+        onChangeText={setFounderInfo}
+        placeholder="Tell us about yourself..."
         placeholderTextColor={colors.border}
         style={[
           styles.input,
@@ -42,10 +42,7 @@ export default function InterviewGetIdeaScreen() {
 
       <Pressable
         accessibilityRole="button"
-        onPress={() => router.push({
-          pathname: '/interview-who-founder',
-          params: { idea }
-        })}
+        onPress={() => router.push('/modal')}
         style={({ pressed }) => [
           styles.button,
           { 
@@ -71,6 +68,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
     fontSize: 28,
     fontWeight: '600',
+    lineHeight: 34,
   },
   instructionsBlock: {
     gap: 8,
