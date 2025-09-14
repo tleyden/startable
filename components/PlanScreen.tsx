@@ -98,9 +98,66 @@ export default function PlanScreen() {
       </ThemedText>
       
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={true}>
-        <ThemedText style={styles.jsonOutput}>
-          {JSON.stringify(plan, null, 2)}
-        </ThemedText>
+        <ThemedView style={styles.section}>
+          <ThemedText style={styles.sectionTitle}>Overall Readiness: {Math.round((plan?.overallReadiness || 0) * 100)}%</ThemedText>
+          <ThemedText style={styles.sectionText}>
+            Estimated Time to Completion: {plan?.estimatedTimeToCompletion}
+          </ThemedText>
+        </ThemedView>
+
+        <ThemedView style={styles.section}>
+          <ThemedText style={styles.sectionTitle}>Progress Weights ({plan?.progressWeights.length || 0} areas)</ThemedText>
+          {plan?.progressWeights.map((weight, index) => (
+            <ThemedView key={index} style={styles.progressItem}>
+              <ThemedText style={styles.progressArea}>
+                {weight.area.replace('_', ' ').toUpperCase()}: {Math.round(weight.weight * 100)}%
+              </ThemedText>
+              <ThemedText style={styles.progressDescription}>{weight.description}</ThemedText>
+              <ThemedText style={styles.progressAchievements}>
+                Key Achievements: {weight.keyAchievements.length} items
+              </ThemedText>
+              <ThemedText style={styles.progressGaps}>
+                Main Gaps: {weight.mainGaps.length} items
+              </ThemedText>
+            </ThemedView>
+          ))}
+        </ThemedView>
+
+        <ThemedView style={styles.section}>
+          <ThemedText style={styles.sectionTitle}>Next Steps ({plan?.nextSteps.length || 0} phases)</ThemedText>
+          {plan?.nextSteps.map((step, index) => (
+            <ThemedView key={index} style={styles.nextStepItem}>
+              <ThemedText style={styles.nextStepPhase}>
+                {step.phase} - {step.priority.toUpperCase()}
+              </ThemedText>
+              <ThemedText style={styles.nextStepTimeframe}>
+                Timeframe: {step.timeframe}
+              </ThemedText>
+              <ThemedText style={styles.nextStepTasks}>
+                Tasks: {step.tasks.length} items
+              </ThemedText>
+              <ThemedText style={styles.nextStepCriteria}>
+                Success Criteria: {step.successCriteria.length} items
+              </ThemedText>
+            </ThemedView>
+          ))}
+        </ThemedView>
+
+        <ThemedView style={styles.section}>
+          <ThemedText style={styles.sectionTitle}>Critical Path ({plan?.criticalPath.length || 0} items)</ThemedText>
+          {plan?.criticalPath.map((item, index) => (
+            <ThemedText key={index} style={styles.criticalPathItem}>
+              {index + 1}. {item}
+            </ThemedText>
+          ))}
+        </ThemedView>
+
+        <ThemedView style={styles.section}>
+          <ThemedText style={styles.sectionTitle}>Raw JSON (for debugging)</ThemedText>
+          <ThemedText style={styles.jsonOutput}>
+            {JSON.stringify(plan, null, 2)}
+          </ThemedText>
+        </ThemedView>
       </ScrollView>
     </ThemedView>
   );
@@ -143,5 +200,80 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'red',
     marginTop: 20,
+  },
+  section: {
+    marginBottom: 24,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(128, 128, 128, 0.2)',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 12,
+  },
+  sectionText: {
+    fontSize: 16,
+    lineHeight: 22,
+    opacity: 0.8,
+  },
+  progressItem: {
+    marginBottom: 16,
+    padding: 12,
+    backgroundColor: 'rgba(184, 230, 184, 0.1)',
+    borderRadius: 8,
+  },
+  progressArea: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  progressDescription: {
+    fontSize: 14,
+    lineHeight: 18,
+    marginBottom: 6,
+    opacity: 0.9,
+  },
+  progressAchievements: {
+    fontSize: 13,
+    color: 'green',
+    marginBottom: 2,
+  },
+  progressGaps: {
+    fontSize: 13,
+    color: 'orange',
+  },
+  nextStepItem: {
+    marginBottom: 16,
+    padding: 12,
+    backgroundColor: 'rgba(184, 230, 184, 0.15)',
+    borderRadius: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: '#B8E6B8',
+  },
+  nextStepPhase: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  nextStepTimeframe: {
+    fontSize: 14,
+    marginBottom: 4,
+    opacity: 0.8,
+  },
+  nextStepTasks: {
+    fontSize: 13,
+    color: 'blue',
+    marginBottom: 2,
+  },
+  nextStepCriteria: {
+    fontSize: 13,
+    color: 'purple',
+  },
+  criticalPathItem: {
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 6,
+    paddingLeft: 8,
   },
 });
