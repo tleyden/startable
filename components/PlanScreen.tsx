@@ -1,6 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { generatePlan, type RoadmapOutput } from '@/llm';
+import { FAKE_PLAN_JSON } from '@/constants';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -48,6 +49,7 @@ export default function PlanScreen() {
           allAnswers
         );
         
+        console.log('Generated Plan JSON:', JSON.stringify(result, null, 2));
         setPlan(result);
       } catch (err) {
         console.error('Error generating plan:', err);
