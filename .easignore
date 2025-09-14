@@ -1,0 +1,2 @@
+# Negate the .gitignore and tell eas build to include .env so the env vars are bundled
+!.env
