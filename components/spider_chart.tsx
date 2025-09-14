@@ -1,24 +1,33 @@
 import React, { useState, useMemo } from 'react';
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import { Info, Clock, AlertTriangle, CheckCircle } from 'lucide-react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
+import { PieChart } from 'react-native-gifted-charts';
+
+const { width } = Dimensions.get('window');
 
 const StartupReadinessSpider = () => {
   const [selectedArea, setSelectedArea] = useState(null);
-  
-  // Sample data structure - replace with your actual JSON data
+
+  // Your JSON data
   const data = {
-    "progressWeights": [
+    progressWeights: [
       {
-        "area": "market_validation",
-        "weight": 0.1,
-        "description": "Minimal market validation with no customer contact or revenue evidence",
-        "rationale": "No customer interviews, surveys, or market research conducted. Only evidence is a prototype from Lovable platform and general statement that 'pet parents are obsessed' without specific validation",
-        "relevance": 1.0,
-        "keyAchievements": [
+        area: "market_validation",
+        weight: 0.1,
+        description: "Minimal market validation with no customer contact or revenue evidence",
+        rationale: "No customer interviews, surveys, or market research conducted. Only evidence is a prototype from Lovable platform and general statement that 'pet parents are obsessed' without specific validation",
+        relevance: 1.0,
+        keyAchievements: [
           "Prototype exists from Lovable platform",
           "General market interest indicated ('pet parents are obsessed')"
         ],
-        "mainGaps": [
+        mainGaps: [
           "No customer discovery or market research conducted",
           "No revenue validation or paying customers",
           "No customer feedback or testimonials",
@@ -26,35 +35,35 @@ const StartupReadinessSpider = () => {
         ]
       },
       {
-        "area": "vision_clarity",
-        "weight": 0.6,
-        "description": "Clear problem and solution definition but lacks specific success metrics",
-        "rationale": "Well-defined problem (dogs have difficulty dating) and solution (Tinder for dogs with location-based matching), but no measurable success criteria or specific target customer segmentation",
-        "relevance": 1.0,
-        "keyAchievements": [
+        area: "vision_clarity",
+        weight: 0.6,
+        description: "Clear problem and solution definition but lacks specific success metrics",
+        rationale: "Well-defined problem (dogs have difficulty dating) and solution (Tinder for dogs with location-based matching), but no measurable success criteria or specific target customer segmentation",
+        relevance: 1.0,
+        keyAchievements: [
           "Clear problem statement: dogs have difficulty dating",
           "Defined solution approach: location-based dog dating platform",
           "Identified target customers: pet parents and dogs",
           "Clear value proposition: finds 'hot dogs' in the area"
         ],
-        "mainGaps": [
+        mainGaps: [
           "No specific success metrics defined",
           "Vague target customer segmentation",
           "No product scope boundaries clearly defined"
         ]
       },
       {
-        "area": "founder_capacity",
-        "weight": 0.3,
-        "description": "Limited relevant experience with significant skill gaps and resource constraints",
-        "rationale": "Founder has personal dog ownership experience and furry community knowledge, but lacks business skills, technical capabilities are unclear, and needs significant funding for marketing",
-        "relevance": 1.0,
-        "keyAchievements": [
+        area: "founder_capacity",
+        weight: 0.3,
+        description: "Limited relevant experience with significant skill gaps and resource constraints",
+        rationale: "Founder has personal dog ownership experience and furry community knowledge, but lacks business skills, technical capabilities are unclear, and needs significant funding for marketing",
+        relevance: 1.0,
+        keyAchievements: [
           "Personal experience as dog owner (direct problem understanding)",
           "Furry community insider knowledge",
           "Working prototype from Lovable platform"
         ],
-        "mainGaps": [
+        mainGaps: [
           "No business skills specified",
           "No technical capabilities detailed",
           "No time commitment information",
@@ -63,13 +72,13 @@ const StartupReadinessSpider = () => {
         ]
       },
       {
-        "area": "business_model",
-        "weight": 0.0,
-        "description": "No business model defined or validated",
-        "rationale": "No revenue model, pricing strategy, unit economics, or monetization approach specified. No evidence of customer willingness to pay",
-        "relevance": 1.0,
-        "keyAchievements": [],
-        "mainGaps": [
+        area: "business_model",
+        weight: 0.0,
+        description: "No business model defined or validated",
+        rationale: "No revenue model, pricing strategy, unit economics, or monetization approach specified. No evidence of customer willingness to pay",
+        relevance: 1.0,
+        keyAchievements: [],
+        mainGaps: [
           "No revenue model defined",
           "No pricing strategy",
           "No unit economics (CAC, LTV, margins unknown)",
@@ -78,16 +87,16 @@ const StartupReadinessSpider = () => {
         ]
       },
       {
-        "area": "market_opportunity",
-        "weight": 0.4,
-        "description": "General market interest indicated but no market research or sizing conducted",
-        "rationale": "Pet parent obsession suggests market potential, but no market size data, trends analysis, or customer segment research provided",
-        "relevance": 1.0,
-        "keyAchievements": [
+        area: "market_opportunity",
+        weight: 0.4,
+        description: "General market interest indicated but no market research or sizing conducted",
+        rationale: "Pet parent obsession suggests market potential, but no market size data, trends analysis, or customer segment research provided",
+        relevance: 1.0,
+        keyAchievements: [
           "General market interest indicated ('all pet parents are obsessed')",
           "Growing pet industry trend mentioned"
         ],
-        "mainGaps": [
+        mainGaps: [
           "No market size data (TAM, SAM unknown)",
           "No market research conducted",
           "No customer segment analysis",
@@ -95,17 +104,17 @@ const StartupReadinessSpider = () => {
         ]
       },
       {
-        "area": "competitive_position",
-        "weight": 0.3,
-        "description": "Basic differentiation but limited competitive analysis",
-        "rationale": "Specialized focus on dog dating provides some differentiation, but no direct competitor analysis, limited competitive advantages, and no defensible moats identified",
-        "relevance": 1.0,
-        "keyAchievements": [
+        area: "competitive_position",
+        weight: 0.3,
+        description: "Basic differentiation but limited competitive analysis",
+        rationale: "Specialized focus on dog dating provides some differentiation, but no direct competitor analysis, limited competitive advantages, and no defensible moats identified",
+        relevance: 1.0,
+        keyAchievements: [
           "Specialized focus on dog dating (vs general pet services)",
           "Location-based matching system",
           "Furry community insider knowledge"
         ],
-        "mainGaps": [
+        mainGaps: [
           "No direct competitor analysis",
           "No competitive advantages detailed",
           "No barriers to entry identified",
@@ -113,54 +122,31 @@ const StartupReadinessSpider = () => {
         ]
       }
     ],
-    "nextSteps": [
+    nextSteps: [
       {
-        "phase": "Market Validation Sprint",
-        "priority": "critical",
-        "timeframe": "6-8 weeks",
-        "prerequisites": [],
-        "tasks": [
-          {
-            "description": "Conduct customer discovery interviews with 20+ pet parents",
-            "effort": "medium",
-            "owner": "Founder",
-            "dependencies": [],
-            "outcome": "Validated problem understanding and customer needs",
-            "skillsRequired": ["Customer Development", "Interviewing"],
-            "resources": ["Customer outreach tools", "Interview guides"]
-          },
-          {
-            "description": "Test willingness to pay with potential customers",
-            "effort": "small",
-            "owner": "Founder",
-            "dependencies": ["Customer interviews completed"],
-            "outcome": "Validated pricing model and revenue potential",
-            "skillsRequired": ["Sales", "Market Research"],
-            "resources": ["Pricing survey tools", "Customer database"]
-          }
-        ],
-        "successCriteria": [
+        phase: "Market Validation Sprint",
+        priority: "critical",
+        timeframe: "6-8 weeks",
+        successCriteria: [
           "20+ customer interviews completed",
           "Clear willingness to pay validated",
           "Specific customer pain points identified",
           "Pricing model validated with target customers"
-        ],
-        "riskMitigation": [
-          "Start with existing network of dog owners",
-          "Offer free trials to reduce customer risk",
-          "Focus on early adopters who are most likely to engage"
         ]
       }
     ],
-    "overallReadiness": 0.25,
-    "estimatedTimeToCompletion": "12-18 months to sustainable revenue and product-market fit"
+    overallReadiness: 0.25,
+    estimatedTimeToCompletion: "12-18 months to sustainable revenue and product-market fit"
   };
 
-  const radarData = useMemo(() => {
-    return data.progressWeights.map(item => ({
-      area: item.area.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-      weight: item.weight * 100,
-      fullWeight: item.weight,
+  // Transform data for the spider/radar chart using PieChart with custom rendering
+  const chartData = useMemo(() => {
+    const colors = ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899'];
+    return data.progressWeights.map((item, index) => ({
+      value: Math.max(item.weight * 100, 5), // Minimum 5 for visibility
+      color: colors[index % colors.length],
+      label: formatAreaName(item.area),
+      originalWeight: item.weight,
       ...item
     }));
   }, []);
@@ -170,170 +156,396 @@ const StartupReadinessSpider = () => {
   };
 
   const getStatusColor = (weight) => {
-    if (weight >= 0.7) return 'text-green-600';
-    if (weight >= 0.4) return 'text-yellow-600';
-    return 'text-red-600';
+    if (weight >= 0.7) return '#10B981'; // green
+    if (weight >= 0.4) return '#F59E0B'; // yellow
+    return '#EF4444'; // red
   };
 
-  const getStatusIcon = (weight) => {
-    if (weight >= 0.7) return <CheckCircle className="w-4 h-4 text-green-600" />;
-    if (weight >= 0.4) return <Clock className="w-4 h-4 text-yellow-600" />;
-    return <AlertTriangle className="w-4 h-4 text-red-600" />;
+  const getStatusText = (weight) => {
+    if (weight >= 0.7) return 'Strong';
+    if (weight >= 0.4) return 'Moderate';
+    return 'Needs Attention';
   };
 
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div className="bg-white p-4 border rounded-lg shadow-lg max-w-xs">
-          <h3 className="font-semibold mb-2">{label}</h3>
-          <p className="text-sm text-gray-600 mb-2">{data.description}</p>
-          <p className="text-lg font-bold text-blue-600">{data.fullWeight.toFixed(1)}/1.0</p>
-        </div>
-      );
-    }
-    return null;
+  const renderLegend = () => {
+    return (
+      <View style={styles.legendContainer}>
+        {chartData.map((item, index) => (
+          <View key={index} style={styles.legendItem}>
+            <View style={[styles.legendColor, { backgroundColor: item.color }]} />
+            <Text style={styles.legendText} numberOfLines={2}>
+              {item.label} ({item.originalWeight.toFixed(1)})
+            </Text>
+          </View>
+        ))}
+      </View>
+    );
+  };
+
+  const renderAreaDetails = () => {
+    return (
+      <View style={styles.areasContainer}>
+        <Text style={styles.sectionTitle}>Area Breakdown</Text>
+        {data.progressWeights.map((area, index) => (
+          <TouchableOpacity
+            key={area.area}
+            style={[
+              styles.areaCard,
+              selectedArea === area.area && styles.selectedAreaCard
+            ]}
+            onPress={() => setSelectedArea(selectedArea === area.area ? null : area.area)}
+          >
+            <View style={styles.areaHeader}>
+              <View style={styles.areaInfo}>
+                <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(area.weight) }]} />
+                <Text style={styles.areaTitle}>{formatAreaName(area.area)}</Text>
+              </View>
+              <View style={styles.areaScore}>
+                <Text style={[styles.scoreText, { color: getStatusColor(area.weight) }]}>
+                  {(area.weight * 100).toFixed(0)}%
+                </Text>
+                <Text style={styles.statusText}>{getStatusText(area.weight)}</Text>
+              </View>
+            </View>
+
+            <Text style={styles.areaDescription}>{area.description}</Text>
+
+            {selectedArea === area.area && (
+              <View style={styles.expandedContent}>
+                {area.keyAchievements.length > 0 && (
+                  <View style={styles.section}>
+                    <Text style={styles.sectionHeader}>✓ Key Achievements:</Text>
+                    {area.keyAchievements.map((achievement, idx) => (
+                      <Text key={idx} style={styles.listItem}>
+                        • {achievement}
+                      </Text>
+                    ))}
+                  </View>
+                )}
+
+                {area.mainGaps.length > 0 && (
+                  <View style={styles.section}>
+                    <Text style={styles.sectionHeader}>⚠ Main Gaps:</Text>
+                    {area.mainGaps.map((gap, idx) => (
+                      <Text key={idx} style={styles.listItem}>
+                        • {gap}
+                      </Text>
+                    ))}
+                  </View>
+                )}
+              </View>
+            )}
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
+  };
+
+  const renderNextSteps = () => {
+    if (!data.nextSteps || data.nextSteps.length === 0) return null;
+
+    return (
+      <View style={styles.nextStepsContainer}>
+        <Text style={styles.sectionTitle}>Recommended Next Steps</Text>
+        {data.nextSteps.map((step, index) => (
+          <View key={index} style={styles.stepCard}>
+            <View style={styles.stepHeader}>
+              <View style={[
+                styles.priorityBadge,
+                step.priority === 'critical' && styles.criticalPriority,
+                step.priority === 'high' && styles.highPriority,
+              ]}>
+                <Text style={styles.priorityText}>{step.priority.toUpperCase()}</Text>
+              </View>
+              <Text style={styles.stepTitle}>{step.phase}</Text>
+            </View>
+            <Text style={styles.timeframe}>Timeframe: {step.timeframe}</Text>
+
+            <Text style={styles.sectionHeader}>Success Criteria:</Text>
+            {step.successCriteria.map((criteria, idx) => (
+              <Text key={idx} style={styles.listItem}>
+                • {criteria}
+              </Text>
+            ))}
+          </View>
+        ))}
+      </View>
+    );
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-6 bg-white">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Startup Readiness Assessment</h1>
-        <div className="flex items-center gap-4 text-lg">
-          <span className="text-gray-600">Overall Readiness:</span>
-          <span className="font-bold text-2xl text-blue-600">
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Startup Readiness Assessment</Text>
+        <View style={styles.overallScore}>
+          <Text style={styles.scoreLabel}>Overall Readiness:</Text>
+          <Text style={styles.overallScoreText}>
             {(data.overallReadiness * 100).toFixed(0)}%
-          </span>
-          <span className="text-gray-500">({data.estimatedTimeToCompletion})</span>
-        </div>
-      </div>
+          </Text>
+        </View>
+        <Text style={styles.timeEstimate}>{data.estimatedTimeToCompletion}</Text>
+      </View>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Spider Chart */}
-        <div className="bg-gray-50 p-6 rounded-lg">
-          <h2 className="text-xl font-semibold mb-4 text-center">Progress Radar</h2>
-          <ResponsiveContainer width="100%" height={400}>
-            <RadarChart data={radarData}>
-              <PolarGrid />
-              <PolarAngleAxis 
-                dataKey="area" 
-                tick={{ fontSize: 12, fill: '#374151' }}
-                className="text-xs"
-              />
-              <PolarRadiusAxis 
-                angle={90} 
-                domain={[0, 100]} 
-                tick={{ fontSize: 10, fill: '#6B7280' }}
-              />
-              <Radar
-                name="Progress"
-                dataKey="weight"
-                stroke="#3B82F6"
-                fill="#3B82F6"
-                fillOpacity={0.3}
-                strokeWidth={2}
-                dot={{ fill: '#3B82F6', strokeWidth: 2, r: 4 }}
-              />
-              <Tooltip content={<CustomTooltip />} />
-            </RadarChart>
-          </ResponsiveContainer>
-        </div>
+      {/* Chart Section */}
+      <View style={styles.chartContainer}>
+        <Text style={styles.chartTitle}>Progress Overview</Text>
+        <View style={styles.chartWrapper}>
+          <PieChart
+            data={chartData}
+            radius={width * 0.25}
+            innerRadius={50}
+            centerLabelComponent={() => (
+              <View style={styles.centerLabel}>
+                <Text style={styles.centerLabelText}>Overall</Text>
+                <Text style={styles.centerLabelScore}>
+                  {(data.overallReadiness * 100).toFixed(0)}%
+                </Text>
+              </View>
+            )}
+          />
+        </View>
+        {renderLegend()}
+      </View>
 
-        {/* Area Details */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold mb-4">Area Breakdown</h2>
-          {data.progressWeights.map((area, index) => (
-            <div 
-              key={area.area}
-              className={`p-4 border rounded-lg cursor-pointer transition-all ${
-                selectedArea === area.area ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-              }`}
-              onClick={() => setSelectedArea(selectedArea === area.area ? null : area.area)}
-            >
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  {getStatusIcon(area.weight)}
-                  <h3 className="font-semibold">{formatAreaName(area.area)}</h3>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className={`font-bold ${getStatusColor(area.weight)}`}>
-                    {(area.weight * 100).toFixed(0)}%
-                  </span>
-                  <Info className="w-4 h-4 text-gray-400" />
-                </div>
-              </div>
-              
-              <p className="text-sm text-gray-600 mb-2">{area.description}</p>
-              
-              {selectedArea === area.area && (
-                <div className="mt-4 space-y-3 border-t pt-4">
-                  <div>
-                    <h4 className="font-medium text-green-700 mb-1">Key Achievements:</h4>
-                    <ul className="text-sm text-gray-600 space-y-1">
-                      {area.keyAchievements.map((achievement, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <CheckCircle className="w-3 h-3 text-green-500 mt-1 flex-shrink-0" />
-                          {achievement}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  {area.mainGaps.length > 0 && (
-                    <div>
-                      <h4 className="font-medium text-red-700 mb-1">Main Gaps:</h4>
-                      <ul className="text-sm text-gray-600 space-y-1">
-                        {area.mainGaps.map((gap, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
-                            <AlertTriangle className="w-3 h-3 text-red-500 mt-1 flex-shrink-0" />
-                            {gap}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Area Details */}
+      {renderAreaDetails()}
 
-      {/* Next Steps Section */}
-      {data.nextSteps && data.nextSteps.length > 0 && (
-        <div className="mt-8 p-6 bg-blue-50 rounded-lg">
-          <h2 className="text-xl font-semibold mb-4 text-blue-900">Recommended Next Steps</h2>
-          {data.nextSteps.map((step, index) => (
-            <div key={index} className="mb-6 last:mb-0">
-              <div className="flex items-center gap-3 mb-2">
-                <span className={`px-2 py-1 rounded text-xs font-medium ${
-                  step.priority === 'critical' ? 'bg-red-100 text-red-800' :
-                  step.priority === 'high' ? 'bg-yellow-100 text-yellow-800' :
-                  'bg-green-100 text-green-800'
-                }`}>
-                  {step.priority.toUpperCase()}
-                </span>
-                <h3 className="font-semibold text-blue-900">{step.phase}</h3>
-                <span className="text-sm text-gray-600">({step.timeframe})</span>
-              </div>
-              
-              <div className="ml-4 space-y-2">
-                <h4 className="font-medium text-sm">Success Criteria:</h4>
-                <ul className="text-sm text-gray-700">
-                  {step.successCriteria.map((criteria, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                      {criteria}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+      {/* Next Steps */}
+      {renderNextSteps()}
+    </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F9FAFB',
+  },
+  header: {
+    padding: 20,
+    backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#111827',
+    marginBottom: 12,
+  },
+  overallScore: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  scoreLabel: {
+    fontSize: 16,
+    color: '#6B7280',
+    marginRight: 12,
+  },
+  overallScoreText: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#3B82F6',
+  },
+  timeEstimate: {
+    fontSize: 14,
+    color: '#6B7280',
+    fontStyle: 'italic',
+  },
+  chartContainer: {
+    backgroundColor: '#FFFFFF',
+    margin: 16,
+    padding: 20,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  chartTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#111827',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  chartWrapper: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  centerLabel: {
+    alignItems: 'center',
+  },
+  centerLabelText: {
+    fontSize: 14,
+    color: '#6B7280',
+  },
+  centerLabelScore: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#3B82F6',
+  },
+  legendContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: '#F3F4F6',
+    borderRadius: 8,
+    maxWidth: width * 0.4,
+  },
+  legendColor: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginRight: 6,
+  },
+  legendText: {
+    fontSize: 12,
+    color: '#374151',
+    flex: 1,
+  },
+  areasContainer: {
+    margin: 16,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#111827',
+    marginBottom: 16,
+  },
+  areaCard: {
+    backgroundColor: '#FFFFFF',
+    padding: 16,
+    marginBottom: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  selectedAreaCard: {
+    borderColor: '#3B82F6',
+    borderWidth: 2,
+    backgroundColor: '#EFF6FF',
+  },
+  areaHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  areaInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  statusIndicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginRight: 8,
+  },
+  areaTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#111827',
+    flex: 1,
+  },
+  areaScore: {
+    alignItems: 'flex-end',
+  },
+  scoreText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  statusText: {
+    fontSize: 12,
+    color: '#6B7280',
+  },
+  areaDescription: {
+    fontSize: 14,
+    color: '#6B7280',
+    lineHeight: 20,
+  },
+  expandedContent: {
+    marginTop: 16,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#E5E7EB',
+  },
+  section: {
+    marginBottom: 12,
+  },
+  sectionHeader: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#374151',
+    marginBottom: 4,
+  },
+  listItem: {
+    fontSize: 13,
+    color: '#6B7280',
+    lineHeight: 18,
+    marginBottom: 2,
+    marginLeft: 8,
+  },
+  nextStepsContainer: {
+    margin: 16,
+    backgroundColor: '#EFF6FF',
+    padding: 20,
+    borderRadius: 12,
+  },
+  stepCard: {
+    backgroundColor: '#FFFFFF',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  stepHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  priorityBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 4,
+    marginRight: 12,
+  },
+  criticalPriority: {
+    backgroundColor: '#FEE2E2',
+  },
+  highPriority: {
+    backgroundColor: '#FEF3C7',
+  },
+  priorityText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#374151',
+  },
+  stepTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1E40AF',
+    flex: 1,
+  },
+  timeframe: {
+    fontSize: 12,
+    color: '#6B7280',
+    marginBottom: 12,
+  },
+});
 
 export default StartupReadinessSpider;
