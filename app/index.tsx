@@ -8,7 +8,7 @@ import { ThemedView } from '@/components/themed-view';
 export default function HomeScreen() {
   const { colors } = useTheme();
   const router = useRouter();
-  const [openaiKey, setOpenaiKey] = useState('');
+  const [openaiKey, setOpenaiKey] = useState(process.env.EXPO_PUBLIC_OPENAI_API_KEY || '');
 
   const handleNext = () => {
     if (!openaiKey.trim()) {
